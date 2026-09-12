@@ -18,7 +18,8 @@ const Linkedin = Link;
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 const SUPABASE_CONFIGURED = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
-const RESUME_FILE_PATH = "resume.pdf";
+const RESUME_BUCKET = "resumes";
+const RESUME_OBJECT = "Stacy-Were-Resume.pdf";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const EMAIL_DOMAIN_TYPOS = {
   "gmai.com": "gmail.com",
@@ -446,12 +447,53 @@ export default function Portfolio() {
   /* ---------- résumé modal ---------- */
   const [resumeOpen, setResumeOpen] = useState(false);
   const [email, setEmail] = useState("");
+  const [resumeCode, setResumeCode] = useState("");
+  const [resumeStep, setResumeStep] = useState("email");
   const [resumeStatus, setResumeStatus] = useState("idle");
   const [resumeMsg, setResumeMsg] = useState("");
-  const openResume = () => { setResumeOpen(true); setResumeStatus("idle"); setResumeMsg(""); };
+  const openResume = () => { setResumeOpen(true); setResumeStep("email"); setResumeStatus("idle"); setResumeMsg(""); setResumeCode(""); };
 
   const handleResumeSubmit = async (e) => {
     e.preventDefault();
+    if (resumeStep === "code") {
+      if (!/^\d{6}$/.test(resumeCode)) {
+        setResumeStatus("err");
+        setResumeMsg("Enter the 6-digit code from your email.");
+        return;
+      }
+      setResumeStatus("sending");
+      try {
+        const verifyRes = await fetch(`${SUPABASE_URL}/auth/v1/verify`, {
+          method: "POST",
+          headers: { apikey: SUPABASE_ANON_KEY, "Content-Type": "application/json" },
+          body: JSON.stringify({ type: "email", email: email.trim(), token: resumeCode }),
+        });
+        if (!verifyRes.ok) throw new Error("verification failed");
+        const session = await verifyRes.json();
+        const signedRes = await fetch(`${SUPABASE_URL}/storage/v1/object/sign/${RESUME_BUCKET}/${RESUME_OBJECT}`, {
+          method: "POST",
+          headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${session.access_token}`, "Content-Type": "application/json" },
+          body: JSON.stringify({ expiresIn: 600 }),
+        });
+        if (!signedRes.ok) throw new Error("download link failed");
+        const { signedURL } = await signedRes.json();
+        const link = document.createElement("a");
+        link.href = signedURL.startsWith("http") ? signedURL : `${SUPABASE_URL}/storage/v1${signedURL}`;
+        link.download = "Stacy-Were-Resume.pdf";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setResumeStatus("ok");
+        setResumeMsg("Email verified. Your download has started.");
+        setTimeout(() => setResumeOpen(false), 1400);
+        setEmail("");
+        setResumeCode("");
+      } catch {
+        setResumeStatus("err");
+        setResumeMsg("That code is invalid or expired. Please request a new one.");
+      }
+      return;
+    }
     if (!isValidEmail(email)) {
       setResumeStatus("err");
       setResumeMsg("Please enter a valid email address.");
@@ -464,25 +506,18 @@ export default function Portfolio() {
       return;
     }
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/resume_requests`, {
+      const res = await fetch(`${SUPABASE_URL}/auth/v1/otp`, {
         method: "POST",
-        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}`, "Content-Type": "application/json", Prefer: "return=minimal" },
-        body: JSON.stringify({ email: email.trim() }),
+        headers: { apikey: SUPABASE_ANON_KEY, "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), create_user: true }),
       });
-      if (!res.ok) throw new Error("request failed");
+      if (!res.ok) throw new Error("code request failed");
+      setResumeStep("code");
       setResumeStatus("ok");
-      setResumeMsg("Thanks! Starting your download...");
-      const link = document.createElement("a");
-      link.href = RESUME_FILE_PATH;
-      link.download = "Stacy-Were-Resume.pdf";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      setTimeout(() => setResumeOpen(false), 1400);
-      setEmail("");
+      setResumeMsg("Check your inbox for a 6-digit verification code.");
     } catch {
       setResumeStatus("err");
-      setResumeMsg("Something went wrong saving your email. Please try again.");
+      setResumeMsg("We could not send a verification code. Please try again.");
     }
   };
 
@@ -936,11 +971,17 @@ export default function Portfolio() {
           <div style={{ background: COLORS.c5, border: `1px solid ${COLORS.line}`, borderRadius: 16, padding: 28, maxWidth: 380, width: "100%", position: "relative", boxShadow: "0 30px 80px rgba(0,0,0,0.5)" }}>
             <button onClick={() => setResumeOpen(false)} style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none", color: "rgba(246,233,238,0.5)", cursor: "pointer" }}><X size={18} /></button>
             <h3 style={{ margin: "0 0 8px", display: "flex", alignItems: "center", gap: 8 }}><ShieldCheck size={18} color={COLORS.c1} /> Download résumé</h3>
-            <p style={{ fontSize: 13, color: "rgba(246,233,238,0.65)", margin: "0 0 18px" }}>Enter your email and I'll unlock the download.</p>
+            <p style={{ fontSize: 13, color: "rgba(246,233,238,0.65)", margin: "0 0 18px" }}>
+              {resumeStep === "email" ? "Verify your email address to unlock the download." : `Enter the code sent to ${email}.`}
+            </p>
             <form onSubmit={handleResumeSubmit}>
-              <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="stacyywere@gmail.com" style={{ width: "100%", padding: "12px 14px", borderRadius: 8, border: `1px solid ${COLORS.line}`, background: "rgba(255,255,255,0.04)", color: COLORS.paper, fontSize: 14, marginBottom: 14 }} />
+              {resumeStep === "email" ? (
+                <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="stacyywere@gmail.com" style={{ width: "100%", padding: "12px 14px", borderRadius: 8, border: `1px solid ${COLORS.line}`, background: "rgba(255,255,255,0.04)", color: COLORS.paper, fontSize: 14, marginBottom: 14 }} />
+              ) : (
+                <input type="text" inputMode="numeric" pattern="[0-9]{6}" maxLength={6} required value={resumeCode} onChange={(e) => setResumeCode(e.target.value.replace(/\D/g, ""))} placeholder="6-digit code" style={{ width: "100%", padding: "12px 14px", borderRadius: 8, border: `1px solid ${COLORS.line}`, background: "rgba(255,255,255,0.04)", color: COLORS.paper, fontSize: 14, marginBottom: 14 }} />
+              )}
               <button type="submit" className="btn btn-primary" style={{ width: "100%", justifyContent: "center" }} disabled={resumeStatus === "sending"}>
-                {resumeStatus === "sending" ? "Sending..." : "Get résumé"}
+                {resumeStatus === "sending" ? "Working..." : resumeStep === "email" ? "Send verification code" : "Verify & download"}
               </button>
               {resumeMsg && <div className="mono" style={{ fontSize: 12, marginTop: 10, color: resumeStatus === "ok" ? "#8fe3b0" : "#f0a3a3" }}>{resumeMsg}</div>}
             </form>

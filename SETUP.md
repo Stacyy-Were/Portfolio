@@ -2,10 +2,26 @@
 
 The component is fully interactive out of the box: typed roles, a working terminal (try typing `help`, `skills`, `scan`...), clickable lab cards, filterable languages, and an email-gated résumé download. Two things to plug in before it's live.
 
-## 1. Add your résumé
-Wherever you deploy this app, place your résumé PDF at the path referenced by `RESUME_FILE_PATH` near the top of the file (defaults to `resume.pdf` in the app's public root).
+## 1. Store your résumé privately
+Do not put the résumé in `main/public`; files there are publicly downloadable.
+In Supabase Storage:
+1. Create a bucket named `resumes` with **Public bucket** disabled.
+2. Upload the file as `Stacy-Were-Resume.pdf`.
+3. In **Authentication → Providers → Email**, enable email OTP.
 
-## 2. Create your Supabase table
+Run this in the Supabase SQL editor:
+```sql
+create policy "Verified users can download resume"
+on storage.objects
+for select
+to authenticated
+using (bucket_id = 'resumes');
+```
+
+The site sends a six-digit code by email. After verification, it creates a signed
+download URL that expires after 10 minutes.
+
+## 2. Configure Supabase
 1. Go to [supabase.com](https://supabase.com) → create a free project.
 2. In the SQL editor, run:
 ```sql
@@ -23,7 +39,7 @@ for insert
 to anon
 with check (true);
 ```
-3. Go to **Project Settings → API** and copy your **Project URL** and **anon public key**.
+3. Go to **Project Settings → API** and copy your **Project URL** and **publishable key**.
 4. For local development, copy `main/.env.example` to `main/.env.local` and replace the values:
 ```js
 VITE_SUPABASE_URL=https://your-project.supabase.co
@@ -46,9 +62,8 @@ To deploy on Vercel, import the repository, set **Root Directory** to `main`, an
 Use the Supabase Project URL and the public `anon` key from **Project Settings → API**. Do not use the service-role key in Vercel or frontend code.
 
 ## Notes
-- **Live preview in this chat**: the interactive version you saw rendered here runs in a sandboxed preview — external network calls (like the Supabase request) may be blocked there even with real credentials. Once you run it as a real deployed app (step 3), the résumé-gate → Supabase → download flow works end-to-end.
-- Until real Supabase credentials are added, the "Get résumé" button shows a friendly message instead of failing silently.
-- View submitted emails anytime in Supabase → Table Editor → `resume_requests`.
+- **Live preview in this chat**: external Supabase calls may be blocked in the sandbox. Test the OTP flow on the deployed app.
+- Until real Supabase credentials are added, the résumé gate shows a configuration message.
 
 ## 4. Second table for the "Send me a message" form
 The contact form in the "Open to opportunities" section posts to a second table. Run this too:
