@@ -20,10 +20,20 @@ const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 const SUPABASE_CONFIGURED = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 const RESUME_FILE_PATH = "resume.pdf";
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const EMAIL_DOMAIN_TYPOS = {
+  "gmai.com": "gmail.com",
+  "gmial.com": "gmail.com",
+  "gmail.co": "gmail.com",
+  "yaho.com": "yahoo.com",
+  "outlok.com": "outlook.com",
+  "hotmial.com": "hotmail.com",
+};
 
 function isValidEmail(value) {
   const normalized = value.trim();
-  return normalized.length <= 254 && EMAIL_PATTERN.test(normalized);
+  if (normalized.length > 254 || !EMAIL_PATTERN.test(normalized)) return false;
+  const domain = normalized.split("@").pop().toLowerCase();
+  return !EMAIL_DOMAIN_TYPOS[domain];
 }
 
 const COLORS = {
