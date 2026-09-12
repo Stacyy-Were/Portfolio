@@ -16,7 +16,7 @@ const Linkedin = Link;
   Project Settings -> API -> Project URL / anon public key
   ========================================================= */
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 const SUPABASE_CONFIGURED = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 const RESUME_FILE_PATH = "resume.pdf";
 
