@@ -511,13 +511,16 @@ export default function Portfolio() {
         headers: { apikey: SUPABASE_ANON_KEY, "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim(), create_user: true }),
       });
-      if (!res.ok) throw new Error("code request failed");
+      if (!res.ok) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error.msg || error.message || "code request failed");
+      }
       setResumeStep("code");
       setResumeStatus("ok");
       setResumeMsg("Check your inbox for a 6-digit verification code.");
-    } catch {
+    } catch (error) {
       setResumeStatus("err");
-      setResumeMsg("We could not send a verification code. Please try again.");
+      setResumeMsg(error.message || "We could not send a verification code. Please try again.");
     }
   };
 

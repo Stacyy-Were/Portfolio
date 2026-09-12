@@ -43,7 +43,7 @@ with check (true);
 4. For local development, copy `main/.env.example` to `main/.env.local` and replace the values:
 ```js
 VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-public-key
+VITE_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
 ```
 The component talks to Supabase with a plain `fetch` call (no extra npm package needed), so it works the moment those two values are real.
 
@@ -57,7 +57,7 @@ npm run dev
 
 To deploy on Vercel, import the repository, set **Root Directory** to `main`, and add these Environment Variables for **Production**, **Preview**, and **Development**:
 - `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
+- `VITE_SUPABASE_PUBLISHABLE_KEY`
 
 Use the Supabase Project URL and the public `anon` key from **Project Settings → API**. Do not use the service-role key in Vercel or frontend code.
 
