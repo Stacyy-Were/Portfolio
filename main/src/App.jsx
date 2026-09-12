@@ -218,10 +218,10 @@ const ABOUT_LANGS = [
 ];
 
 const JOURNEY = [
-  { tag: "[Year]", title: "[Add milestone title]", desc: "[Add a short line about this step in your journey]" },
-  { tag: "[Year]", title: "[Add milestone title]", desc: "[Add a short line about this step in your journey]" },
-  { tag: "[Year]", title: "[Add milestone title]", desc: "[Add a short line about this step in your journey]" },
-  { tag: "[Year]", title: "[Add milestone title]", desc: "[Add a short line about this step in your journey]" },
+  { tag: "[Year]", title: "[zeb zeb zeb zeb]", desc: "[bleh bleh bleh bleh]", url: "https://www.tiktok.com/@zibzibcat36/video/7567765710584384788?is_from_webapp=1&sender_device=pc" },
+  { tag: "[Year]", title: "[yapapa]", desc: "[yapapa mmh yapapa hamaa]", url: "https://www.tiktok.com/@dolbwun00/video/7572181655180397831?is_from_webapp=1&sender_device=pc" },
+  { tag: "[Year]", title: "[Das war ein Befeh!]", desc: "[Der Angriff Steiner war ein Befeh!]", url: "https://www.tiktok.com/@_xxr4sb3rryxx/video/7524391531977952542?is_from_webapp=1&sender_device=pc" },
+  { tag: "[Year]", title: "[ahhhhhhhhhhhhh]", desc: "[ahhhhhhhhhhhhh]", url: "https://www.tiktok.com/@mashiclavo8/video/7322232613702274310?is_from_webapp=1&sender_device=pc" },
 ];
 
 const SOCIALS = [
@@ -741,8 +741,14 @@ export default function Portfolio() {
                 {JOURNEY.map((j, idx) => (
                   <div key={idx} className="journey-node">
                     <div className="mono" style={{ fontSize: 12.5, color: COLORS.c1, marginBottom: 10 }}>{j.tag}</div>
-                    <h3 style={{ fontSize: 17, margin: "0 0 8px" }}>{j.title}</h3>
-                    <p style={{ fontSize: 14, margin: 0, color: "rgba(246,233,238,0.55)" }}>{j.desc}</p>
+                    <h3 style={{ fontSize: 17, margin: "0 0 8px" }}>
+                      <a href={j.url} target="_blank" rel="noopener noreferrer" style={{ color: COLORS.c1, textDecoration: "none" }}>
+                        {j.title} <ExternalLink size={14} />
+                      </a>
+                    </h3>
+                    <p style={{ fontSize: 14, margin: 0, color: "rgba(246,233,238,0.55)" }}>
+                      <a href={j.url} target="_blank" rel="noopener noreferrer" style={{ color: "inherit", textDecoration: "none" }}>{j.desc}</a>
+                    </p>
                   </div>
                 ))}
               </div>
