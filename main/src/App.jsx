@@ -19,6 +19,12 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 const SUPABASE_CONFIGURED = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
 const RESUME_FILE_PATH = "resume.pdf";
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isValidEmail(value) {
+  const normalized = value.trim();
+  return normalized.length <= 254 && EMAIL_PATTERN.test(normalized);
+}
 
 const COLORS = {
   c1: "#c991a8",
@@ -436,7 +442,11 @@ export default function Portfolio() {
 
   const handleResumeSubmit = async (e) => {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (!isValidEmail(email)) {
+      setResumeStatus("err");
+      setResumeMsg("Please enter a valid email address.");
+      return;
+    }
     setResumeStatus("sending");
     if (!SUPABASE_CONFIGURED) {
       setResumeStatus("err");
@@ -483,6 +493,11 @@ export default function Portfolio() {
   const handleContactSubmit = async (e) => {
     e.preventDefault();
     if (!cName.trim() || !cEmail.trim() || !cMsg.trim()) return;
+    if (!isValidEmail(cEmail)) {
+      setContactStatus("err");
+      setContactMsg("Please enter a valid email address.");
+      return;
+    }
     setContactStatus("sending");
     if (!SUPABASE_CONFIGURED) {
       setContactStatus("err");
