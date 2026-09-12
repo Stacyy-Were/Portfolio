@@ -218,10 +218,10 @@ const ABOUT_LANGS = [
 ];
 
 const JOURNEY = [
-  { tag: "[Year]", title: "[zeb zeb zeb zeb]", desc: "[bleh bleh bleh bleh]", url: "https://www.tiktok.com/@zibzibcat36/video/7567765710584384788?is_from_webapp=1&sender_device=pc" },
-  { tag: "[Year]", title: "[yapapa]", desc: "[yapapa mmh yapapa hamaa]", url: "https://www.tiktok.com/@dolbwun00/video/7572181655180397831?is_from_webapp=1&sender_device=pc" },
-  { tag: "[Year]", title: "[Das war ein Befeh!]", desc: "[Der Angriff Steiner war ein Befeh!]", url: "https://www.tiktok.com/@_xxr4sb3rryxx/video/7524391531977952542?is_from_webapp=1&sender_device=pc" },
-  { tag: "[Year]", title: "[ahhhhhhhhhhhhh]", desc: "[ahhhhhhhhhhhhh]", url: "https://www.tiktok.com/@mashiclavo8/video/7322232613702274310?is_from_webapp=1&sender_device=pc" },
+  { tag: "[2025 - Ongoing]", title: "[Practical Learning]", desc: "[Built a home lab (Kali, Parrot, Metasploitable) and started CTFs on TryHackMe, HackerDNA, and others — turning curiosity into deliberate practice.]" },
+  { tag: "[2025]", title: "[Internship]", desc: "[IT Support Internship at Bush & Beyond Ltd. Troubleshooting, systems support, documentation.]" },
+  { tag: "[2023 - 2024]", title: "[Pull towards security]", desc: "[Began Bachelor's in IT at JKUAT, and got an interest in cybersecurity (logs, networks, how attacks happen).]" },
+  { tag: "[2020]", title: "[Where it started]", desc: "[Started Diploma in IT at JKUAT. Built the fundamentals — how systems, networks, and software actually work]" },
 ];
 
 const SOCIALS = [
