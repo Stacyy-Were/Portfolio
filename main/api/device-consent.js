@@ -12,6 +12,10 @@ export default async function handler(request, response) {
   const ipAddress = (request.headers["x-forwarded-for"] || request.socket?.remoteAddress || "unknown")
     .split(",")[0]
     .trim();
+  const headerLatitude = Number(request.headers["x-vercel-ip-latitude"]);
+  const headerLongitude = Number(request.headers["x-vercel-ip-longitude"]);
+  const locationLat = typeof latitude === "number" ? latitude : Number.isFinite(headerLatitude) ? headerLatitude : null;
+  const locationLng = typeof longitude === "number" ? longitude : Number.isFinite(headerLongitude) ? headerLongitude : null;
   const supabaseUrl = globalThis.process.env.SUPABASE_URL;
   const serviceRoleKey = globalThis.process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -33,8 +37,8 @@ export default async function handler(request, response) {
         email: email.trim(),
         device_type: deviceType,
         ip_address: ipAddress,
-        location_lat: typeof latitude === "number" ? latitude : null,
-        location_lng: typeof longitude === "number" ? longitude : null,
+        location_lat: locationLat,
+        location_lng: locationLng,
       }),
     });
   } catch {
