@@ -19,25 +19,31 @@ export default async function handler(request, response) {
     return response.status(503).json({ error: "Device consent storage is not configured" });
   }
 
-  const insertResponse = await fetch(`${supabaseUrl}/rest/v1/device_consents`, {
-    method: "POST",
-    headers: {
-      apikey: serviceRoleKey,
-      Authorization: `Bearer ${serviceRoleKey}`,
-      "Content-Type": "application/json",
-      Prefer: "return=minimal",
-    },
-    body: JSON.stringify({
-      email: email.trim(),
-      device_type: deviceType,
-      ip_address: ipAddress,
-      location_lat: typeof latitude === "number" ? latitude : null,
-      location_lng: typeof longitude === "number" ? longitude : null,
-    }),
-  });
+  let insertResponse;
+  try {
+    insertResponse = await fetch(`${supabaseUrl}/rest/v1/device_consents`, {
+      method: "POST",
+      headers: {
+        apikey: serviceRoleKey,
+        Authorization: `Bearer ${serviceRoleKey}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify({
+        email: email.trim(),
+        device_type: deviceType,
+        ip_address: ipAddress,
+        location_lat: typeof latitude === "number" ? latitude : null,
+        location_lng: typeof longitude === "number" ? longitude : null,
+      }),
+    });
+  } catch {
+    return response.status(502).json({ error: "Could not reach Supabase" });
+  }
 
   if (!insertResponse.ok) {
-    return response.status(502).json({ error: "Could not store device consent" });
+    const error = await insertResponse.text();
+    return response.status(502).json({ error: `Supabase rejected device consent (${insertResponse.status})${error ? `: ${error.slice(0, 160)}` : ""}` });
   }
 
   return response.status(204).end();

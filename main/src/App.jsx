@@ -513,8 +513,9 @@ export default function Portfolio() {
         body: JSON.stringify({ email: email.trim(), deviceType: getDeviceType(), ...location }),
       });
       if (!deviceResponse.ok) {
+        const deviceError = await deviceResponse.json().catch(() => ({}));
         setResumeStatus("err");
-        setResumeMsg("Your résumé request was recorded, but device consent could not be saved.");
+        setResumeMsg(`Your résumé request was recorded, but device consent could not be saved: ${deviceError.error || "check the Vercel API settings"}.`);
         return;
       }
     }
