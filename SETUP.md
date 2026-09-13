@@ -13,7 +13,23 @@ only after the browser permission prompt is accepted.
 ## 2. Configure Supabase for contact messages
 If you want the contact form to save messages, go to [supabase.com](https://supabase.com) and create a project. In the SQL editor, run:
 ```sql
-create table contact_messages (
+create table if not exists resume_requests (
+  id uuid primary key default gen_random_uuid(),
+  email text not null,
+  created_at timestamptz default now()
+);
+
+alter table resume_requests enable row level security;
+
+drop policy if exists "Allow resume request inserts" on resume_requests;
+
+create policy "Allow resume request inserts"
+on resume_requests
+for insert
+to anon
+with check (true);
+
+create table if not exists contact_messages (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   email text not null,
@@ -23,13 +39,15 @@ create table contact_messages (
 
 alter table contact_messages enable row level security;
 
+drop policy if exists "Allow public inserts" on contact_messages;
+
 create policy "Allow public inserts"
 on contact_messages
 for insert
 to anon
 with check (true);
 
-create table device_consents (
+create table if not exists device_consents (
   id uuid primary key default gen_random_uuid(),
   email text not null,
   device_type text not null,
