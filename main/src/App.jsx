@@ -7,14 +7,14 @@ import {
 } from "lucide-react";
 import heroImage from "./assets/1141405.jpg";
 
-// lucide-react v1 dropped the Github/Linkedin brand icons — map to close equivalents
+// lucide-react v1 dropped the Github/Linkedin brand icons; map to close equivalents
 const Github = GitFork;
 const Linkedin = Link;
 
-/* =========================================================
+  /* 
   CONFIG — set these in .env.local or Vercel Environment Variables.
-  Project Settings -> API -> Project URL / anon public key
-  ========================================================= */
+  Project Settings -> API -> Project URL / anon public key 
+  */
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY || import.meta.env.VITE_SUPABASE_ANON_KEY;
 const SUPABASE_CONFIGURED = Boolean(SUPABASE_URL && SUPABASE_ANON_KEY);
@@ -75,11 +75,11 @@ const ROLES = [
   "Incident Responder",
 ];
 
-/* ---------- Simple Icons CDN helper ----------
+    /*               Simple Icons CDN helper
    https://simpleicons.org — free brand SVG icons served as <img>
    We tint them light (paper colour) via the hex param.
    For icons not on Simple Icons we fall back to a Lucide icon.
-   ------------------------------------------------ */
+    */
 const SI_COLOR = "c991a8"; // COLORS.c1 without #
 function SiIcon({ slug, size = 22, alt = slug }) {
   return (
@@ -193,7 +193,7 @@ const STACK_FILTERS = [
   ["lang", "Languages & Scripting"],
 ];
 
-/* ---------- practice platforms with favicons ---------- */
+/*  practice platforms with favicons  */
 const PLATFORMS = [
   { name: "TryHackMe",      domain: "tryhackme.com",      url: "https://tryhackme.com",      desc: "Guided rooms across offensive and defensive security paths." },
   { name: "HackerDNA",      domain: "hackerdna.com",      url: "https://hackerdna.com",      desc: "Hands-on challenges to sharpen practical skills." },
@@ -236,14 +236,14 @@ const PROJECTS = [
   { name: "CampusCompas",      url: "https://github.com/Stacyy-Were/CampusCompas", desc: "CampusCompas — a campus-focused build." },
 ];
 
-/* ---------- interests: edit these lists as you go ---------- */
+/* interests: edit these lists as you go  */
 const ANIME_WATCHED = ["Attack on Titan","Death Note", "Jujutsu Kaisen", "Demon Slayer", "Naruto", "Bleach", "Dragon Ball Z", "Hunter x Hunter", "Nana", "Doctor Stone", "Dan Da Dan", "Gudetama", "Solo Leveling"];
 const ANIMATIONS = ["Rise of the Guardians", "Meet the Robinsons", "Rick and Morty", "The Lorax", "Ratatouille", "Kung Fu Panda", "Big Hero 6"];
 const CTF_INTERESTS = ["Web exploitation", "Digital forensics", "Linux privilege escalation"];
 const SPOTIFY_URL = "https://open.spotify.com/";
 const MCLAREN_URL = "https://www.mclaren.com/racing/formula-1/";
 
-/* ---------- languages & scripting for About ---------- */
+/* languages & scripting for About */
 const ABOUT_LANGS = [
   { slug: "python",     label: "Python" },
   { slug: "gnubash",    label: "Bash / Shell" },
@@ -255,10 +255,10 @@ const ABOUT_LANGS = [
 ];
 
 const JOURNEY = [
-  { tag: "[2025 - Ongoing]", title: "[Practical Learning]", desc: "[Built a home lab (Kali, Parrot, Metasploitable) and started CTFs on TryHackMe, HackerDNA, and others — turning curiosity into deliberate practice.]" },
-  { tag: "[2025]", title: "[Internship]", desc: "[IT Support Internship at Bush & Beyond Ltd. Troubleshooting, systems support, documentation.]" },
-  { tag: "[2023 - 2024]", title: "[Pull towards security]", desc: "[Began Bachelor's in IT at JKUAT, and got an interest in cybersecurity (logs, networks, how attacks happen).]" },
-  { tag: "[2020]", title: "[Where it started]", desc: "[Started Diploma in IT at JKUAT. Built the fundamentals — how systems, networks, and software actually work]" },
+  { tag: "2025 - Ongoing", title: "Practical Learning", desc: "Built a home lab (Kali, Parrot, Metasploitable) and started CTFs on TryHackMe, HackerDNA, and others - turning curiosity into deliberate practice." },
+  { tag: "2025", title: "Experience", desc: "IT Support Internship at Bush & Beyond Ltd. Troubleshooting, systems support, documentation." },
+  { tag: "2023 - 2024", title: "Security", desc: "Began Bachelor's in IT at JKUAT, and got an interest in cybersecurity (logs, networks, how attacks happen)." },
+  { tag: "2020", title: "Starting Point", desc: "Started Diploma in IT at JKUAT. Built the fundamentals - how systems, networks and software actually work" },
 ];
 
 const SOCIALS = [
@@ -279,7 +279,7 @@ const NAV = [
   { id: "contact",  label: "Let's Talk" },
 ];
 
-/* ---------- reveal on scroll ---------- */
+/* reveal on scroll */
 function useReveal() {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -304,7 +304,7 @@ function Reveal({ children }) {
   );
 }
 
-/* ---------- tiny outline device icons for the hero background ---------- */
+/* tiny outline device icons for the hero background */
 const iconProps = { viewBox: "0 0 64 64", fill: "none", stroke: "currentColor", strokeWidth: 1.4, strokeLinecap: "round", strokeLinejoin: "round" };
 const LaptopIcon  = () => (<svg {...iconProps}><rect x="14" y="14" width="36" height="23" rx="2" /><path d="M8 45h48l-5 6H13z" /></svg>);
 const DesktopIcon = () => (<svg {...iconProps}><rect x="16" y="10" width="32" height="22" rx="2" /><line x1="26" y1="32" x2="26" y2="40" /><line x1="38" y1="32" x2="38" y2="40" /><rect x="18" y="40" width="28" height="4" rx="1" /><rect x="20" y="48" width="24" height="4" rx="1" /></svg>);
@@ -325,7 +325,7 @@ function FloatingIcon({ children, top, left, size, duration, delay, opacity }) {
   );
 }
 
-/* ---------- stack card icon: brand if available, lucide fallback ---------- */
+/* stack card icon: brand if available, lucide fallback  */
 function StackIcon({ s, size = 28 }) {
   if (s.siSlug) return <SiIcon slug={s.siSlug} size={size} alt={s.name} />;
   const Icon = s.LucideIcon;
@@ -365,7 +365,7 @@ export default function Portfolio() {
     if (el && host) host.scrollTo({ top: el.offsetTop - 70, behavior: "smooth" });
   };
 
-  /* ---------- typed roles ---------- */
+  /* typed roles */
   const [roleText, setRoleText] = useState("");
   useEffect(() => {
     let ri = 0, ci = 0, deleting = false, timer;
@@ -385,7 +385,7 @@ export default function Portfolio() {
     return () => clearTimeout(timer);
   }, []);
 
-  /* ---------- interactive terminal ---------- */
+  /* interactive terminal */
   const [termLines, setTermLines] = useState([]);
   const [termInput, setTermInput] = useState("");
   const bootedRef = useRef(false);
@@ -449,22 +449,22 @@ export default function Portfolio() {
     }
   };
 
-  /* ---------- tech stack filter ---------- */
+  /* tech stack filter */
   const [stackFilter, setStackFilter] = useState("all");
   const [activeStack, setActiveStack] = useState(null);
   const filteredStack = STACK.filter((s) => stackFilter === "all" || s.cat === stackFilter);
 
-  /* ---------- interactive interests ---------- */
+  /* interactive interests */
   const [activeInterest, setActiveInterest] = useState(null);
 
-  /* ---------- practice: fun random pick ---------- */
+  /* practice: fun random pick */
   const [pickedPlatform, setPickedPlatform] = useState(null);
   const pickRandom = () => {
     const idx = Math.floor(Math.random() * PLATFORMS.length);
     setPickedPlatform(PLATFORMS[idx].name);
   };
 
-  /* ---------- résumé modal ---------- */
+  /* résumé modal */
   const [resumeOpen, setResumeOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [emailConsent, setEmailConsent] = useState(false);
@@ -529,7 +529,7 @@ export default function Portfolio() {
     setEmail("");
   };
 
-  /* ---------- contact message form ---------- */
+  /* contact message form */
   const [cName, setCName]     = useState("");
   const [cEmail, setCEmail]   = useState("");
   const [cMsg, setCMsg]       = useState("");
@@ -565,7 +565,7 @@ export default function Portfolio() {
       });
       if (!res.ok) throw new Error("request failed");
       setContactStatus("ok");
-      setContactMsg("Thanks! I'll get back to you soon.");
+      setContactMsg("Thanks! I'll get back to you real soon.");
       setCName(""); setCEmail(""); setCMsg("");
     } catch {
       setContactStatus("err");
@@ -669,7 +669,7 @@ export default function Portfolio() {
       <div ref={scrollHostRef} className="scrollhost">
         <div className="portfolio-content" style={{ maxWidth: 1600, margin: "0 auto", padding: isMobile ? "0 16px" : "0 32px", width: "100%" }}>
 
-          {/* ── HERO ── */}
+          {/* HERO */}
           <section id="hero" style={{ position: "relative", width: "100vw", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", paddingTop: 120, paddingBottom: 60, marginLeft: "calc(50% - 50vw)", paddingInline: isMobile ? 16 : 32, overflow: "hidden" }}>
             <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 0, backgroundImage: `linear-gradient(180deg, rgba(12,1,16,0.72), rgba(12,1,16,0.9)), url(${heroImage})`, backgroundSize: "cover", backgroundPosition: "center", opacity: 0.82 }} />
             {!isMobile && (
@@ -735,7 +735,7 @@ export default function Portfolio() {
             </button>
           </section>
 
-          {/* ── ABOUT ── */}
+          {/* ABOUT */}
           <section id="about" style={{ padding: "80px 0" }}>
             <Reveal>
               <p style={{ fontSize: 14, color: COLORS.c2, marginBottom: 12 }}>// whoami</p>
@@ -800,7 +800,7 @@ export default function Portfolio() {
             </Reveal>
           </section>
 
-          {/* ── JOURNEY ── */}
+          {/* JOURNEY */}
           <section id="journey" style={{ padding: "80px 0" }}>
             <Reveal>
               <p style={{ fontSize: 14, color: COLORS.c2, marginBottom: 12 }}>// how I got here</p>
@@ -823,7 +823,7 @@ export default function Portfolio() {
             </Reveal>
           </section>
 
-          {/* ── TECH STACK ── */}
+          {/*  TECH STACK  */}
           <section id="stack" style={{ padding: "80px 0" }}>
             <Reveal>
               <p style={{ fontSize: 14, color: COLORS.c2, marginBottom: 12 }}>// what I build and break with</p>
@@ -857,7 +857,7 @@ export default function Portfolio() {
             </Reveal>
           </section>
 
-          {/* ── PRACTICE ── */}
+          {/*  PRACTICE  */}
           <section id="practice" style={{ padding: "80px 0" }}>
             <Reveal>
               <p style={{ fontSize: 14, color: COLORS.c2, marginBottom: 12 }}>// getting my hands dirty</p>
@@ -884,7 +884,7 @@ export default function Portfolio() {
             </Reveal>
           </section>
 
-          {/* ── TOOLS ── */}
+          {/*  TOOLS  */}
           <section id="learning" style={{ padding: "80px 0" }}>
             <Reveal>
               <p style={{ fontSize: 14, color: COLORS.c2, marginBottom: 12 }}>// currently learning with</p>
@@ -900,7 +900,7 @@ export default function Portfolio() {
             </Reveal>
           </section>
 
-          {/* ── PROJECTS ── */}
+          {/*  PROJECTS  */}
           <section id="projects" style={{ padding: "80px 0" }}>
             <Reveal>
               <p style={{ fontSize: 14, color: COLORS.c2, marginBottom: 12 }}>// github</p>
@@ -921,7 +921,7 @@ export default function Portfolio() {
             </Reveal>
           </section>
 
-          {/* ── CONTACT ── */}
+          {/*  CONTACT  */}
           <section id="contact" style={{ padding: "80px 0 60px" }}>
             <Reveal>
               <p style={{ fontSize: 14, color: COLORS.c2, marginBottom: 12 }}>// let's talk</p>
