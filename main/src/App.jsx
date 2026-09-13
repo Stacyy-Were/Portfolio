@@ -110,7 +110,7 @@ function LanguageIcon({ slug, label }) {
   return <SiIcon slug={slug} size={18} alt={label} />;
 }
 
-/* ---------- tech stack: lab + languages ---------- */
+/* tech stack: lab + languages */
 const STACK = [
   {
     id: "ubuntu", cat: "os", role: "Host OS", name: "Ubuntu",
@@ -132,7 +132,7 @@ const STACK = [
   },
   {
     id: "win10", cat: "target", role: "Target", name: "Windows 10",
-    siSlug: "windows", LucideIcon: Monitor,
+    siSlug: "windows", LucideIcon: WindowsLogo,
     short: "Target machine for studying Windows logs, services and attack surfaces.",
     detail: "Used to get comfortable with Event Viewer logs, Windows services and how attacks look from the defender's side.",
   },
@@ -257,7 +257,7 @@ const ABOUT_LANGS = [
 
 const JOURNEY = [
   { tag: "2025 - Ongoing", title: "Practical Learning", desc: "Built a home lab (Kali, Parrot, Metasploitable) and started CTFs on TryHackMe, HackerDNA, and others - turning curiosity into deliberate practice." },
-  { tag: "2025", title: "Experience", desc: "IT Support Internship at Bush & Beyond Ltd. Troubleshooting, systems support, documentation." },
+  { tag: "2025", title: "Experience", desc: "IT Support Internship at Bush & Beyond Ltd. Troubleshooting, Database Management, Systems Support, Documentation." },
   { tag: "2023 - 2024", title: "Security", desc: "Began Bachelor's in IT at JKUAT, and got an interest in cybersecurity (logs, networks, how attacks happen)." },
   { tag: "2020", title: "Starting Point", desc: "Started Diploma in IT at JKUAT. Built the fundamentals - how systems, networks and software actually work" },
 ];
@@ -724,9 +724,9 @@ export default function Portfolio() {
               </div>
 
               <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginTop: 34, justifyContent: "center" }}>
-                <button className="btn btn-primary" onClick={() => scrollTo("contact")}>Let's talk <ChevronRight size={15} /></button>
-                <button className="btn" onClick={openResume}><Download size={15} /> Download résumé</button>
-                <button className="btn" onClick={runScanDemo}><Radar size={15} /> Run scan demo</button>
+                <button className="btn btn-primary" onClick={() => scrollTo("contact")}>Get In Touch <ChevronRight size={15} /></button>
+                <button className="btn" onClick={openResume}><Download size={15} /> Download Résumé</button>
+                <button className="btn" onClick={runScanDemo}><Radar size={15} /> Run Scan Demo</button>
               </div>
             </div>
             <button className="hero-scroll-cue" onClick={() => scrollTo("about")} aria-label="Scroll to About section">
@@ -926,7 +926,7 @@ export default function Portfolio() {
           <section id="contact" style={{ padding: "80px 0 60px" }}>
             <Reveal>
               <p style={{ fontSize: 14, color: COLORS.c2, marginBottom: 12 }}>// let's talk</p>
-              <h2 style={{ fontSize: "clamp(28px,4vw,40px)", margin: "0 0 16px" }}>Open to opportunities</h2>
+              <h2 style={{ fontSize: "clamp(28px,4vw,40px)", margin: "0 0 16px" }}>Get In Touch</h2>
               <p style={{ marginBottom: 24, maxWidth: 680 }}>Open to junior SOC roles and internships — or just talking shop about logs, labs and everything cybersecurity.</p>
               <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 20 }}>
                 <div className="card" style={{ padding: 28, order: isMobile ? 1 : 2 }}>
