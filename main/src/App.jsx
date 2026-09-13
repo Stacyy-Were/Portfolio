@@ -485,13 +485,38 @@ export default function Portfolio() {
       setResumeMsg("Please enter a valid email address.");
       return;
     }
+    if (!SUPABASE_CONFIGURED) {
+      setResumeStatus("err");
+      setResumeMsg("Resume requests are not configured yet. Please try again later.");
+      return;
+    }
+    const requestResponse = await fetch(`${SUPABASE_URL}/rest/v1/resume_requests`, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify({ email: email.trim() }),
+    });
+    if (!requestResponse.ok) {
+      setResumeStatus("err");
+      setResumeMsg("We could not record your request. Please try again.");
+      return;
+    }
     if (deviceConsent) {
       const location = await requestLocation();
-      await fetch("/api/device-consent", {
+      const deviceResponse = await fetch("/api/device-consent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: email.trim(), deviceType: getDeviceType(), ...location }),
-      }).catch(() => {});
+      });
+      if (!deviceResponse.ok) {
+        setResumeStatus("err");
+        setResumeMsg("Your résumé request was recorded, but device consent could not be saved.");
+        return;
+      }
     }
     setResumeStatus("ok");
     setResumeMsg("Thanks! Starting your download...");
