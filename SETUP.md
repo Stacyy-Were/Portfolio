@@ -78,6 +78,9 @@ To deploy on Vercel, import the repository and set **Root Directory** to `main`.
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_PUBLISHABLE_KEY`
 
+If your project already uses `VITE_SUPABASE_ANON_KEY`, you can keep that existing
+variable instead of creating a duplicate. The app accepts either key name.
+
 For the Vercel API function, also add these server-only variables. Do not prefix
 them with `VITE_` and do not expose the service-role key to browser code:
 - `SUPABASE_URL`
