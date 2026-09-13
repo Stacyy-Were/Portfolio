@@ -480,44 +480,42 @@ export default function Portfolio() {
       setResumeMsg("Please accept email collection to download the résumé.");
       return;
     }
+    if (!deviceConsent) {
+      setResumeStatus("err");
+      setResumeMsg("Please accept device data collection to download the résumé.");
+      return;
+    }
     if (!isValidEmail(email)) {
       setResumeStatus("err");
       setResumeMsg("Please enter a valid email address.");
       return;
     }
-    if (!SUPABASE_CONFIGURED) {
-      setResumeStatus("err");
-      setResumeMsg("Resume requests are not configured yet. Please try again later.");
-      return;
-    }
-    const requestResponse = await fetch(`${SUPABASE_URL}/rest/v1/resume_requests`, {
-      method: "POST",
-      headers: {
-        apikey: SUPABASE_ANON_KEY,
-        Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-        "Content-Type": "application/json",
-        Prefer: "return=minimal",
-      },
-      body: JSON.stringify({ email: email.trim() }),
-    });
-    if (!requestResponse.ok) {
-      setResumeStatus("err");
-      setResumeMsg("We could not record your request. Please try again.");
-      return;
-    }
-    if (deviceConsent) {
-      const location = await requestLocation();
-      const deviceResponse = await fetch("/api/device-consent", {
+    if (SUPABASE_CONFIGURED) {
+      const requestResponse = await fetch(`${SUPABASE_URL}/rest/v1/resume_requests`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: email.trim(), deviceType: getDeviceType(), ...location }),
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+          "Content-Type": "application/json",
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify({ email: email.trim() }),
       });
-      if (!deviceResponse.ok) {
-        const deviceError = await deviceResponse.json().catch(() => ({}));
-        setResumeStatus("err");
-        setResumeMsg(`Your résumé request was recorded, but device consent could not be saved: ${deviceError.error || "check the Vercel API settings"}.`);
-        return;
+      if (!requestResponse.ok) {
+        setResumeMsg("Your email could not be recorded, but your download will continue.");
       }
+    }
+    const location = await requestLocation();
+    const deviceResponse = await fetch("/api/device-consent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.trim(), deviceType: getDeviceType(), ...location }),
+    });
+    if (!deviceResponse.ok) {
+      const deviceError = await deviceResponse.json().catch(() => ({}));
+      setResumeStatus("err");
+      setResumeMsg(`Device permission could not be recorded: ${deviceError.error || "please try again later"}.`);
+      return;
     }
     setResumeStatus("ok");
     setResumeMsg("Thanks! Starting your download...");
@@ -991,7 +989,7 @@ export default function Portfolio() {
                 </label>
                 <label style={{ display: "flex", alignItems: "flex-start", gap: 8, cursor: "pointer" }}>
                   <input type="checkbox" checked={deviceConsent} onChange={(e) => setDeviceConsent(e.target.checked)} style={{ marginTop: 3, accentColor: COLORS.c3 }} />
-                  <span>I agree to collect my device type, IP address, and approximate location for abuse prevention. This is optional; leave unchecked to decline. Location requires browser permission.</span>
+                  <span>I agree to collect my device type, IP address, and approximate location for abuse prevention. This is required to download the résumé. Location requires browser permission.</span>
                 </label>
               </div>
               <button type="submit" className="btn btn-primary" style={{ width: "100%", justifyContent: "center" }} disabled={resumeStatus === "sending"}>
