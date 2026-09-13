@@ -989,7 +989,7 @@ export default function Portfolio() {
                 </label>
                 <label style={{ display: "flex", alignItems: "flex-start", gap: 8, cursor: "pointer" }}>
                   <input type="checkbox" checked={deviceConsent} onChange={(e) => setDeviceConsent(e.target.checked)} style={{ marginTop: 3, accentColor: COLORS.c3 }} />
-                  <span>I agree to collect my device type, IP address, and approximate location for abuse prevention. This is required to download the résumé. Location requires browser permission.</span>
+                  <span>I agree to collect my device and network information for abuse prevention. This is required to download the résumé. Location requires browser permission.</span>
                 </label>
               </div>
               <button type="submit" className="btn btn-primary" style={{ width: "100%", justifyContent: "center" }} disabled={resumeStatus === "sending"}>
