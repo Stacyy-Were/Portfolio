@@ -73,6 +73,7 @@ const ROLES = [
   "Threat Hunter",
   "I.T Specialist",
   "Incident Responder",
+  "Jr. Network Engineer",
 ];
 
     /*               Simple Icons CDN helper
@@ -437,12 +438,12 @@ export default function Portfolio() {
     setTermInput("");
     switch (cmd) {
       case "help":     pushLine("out", "commands: whoami · stack · practice · tools · projects · contact · scan · clear"); break;
-      case "whoami":   pushLine("out", "Stacy Were — Jr. SOC Analyst / Threat Hunter / I.T Specialist / Incident Responder"); break;
+      case "whoami":   pushLine("out", "Stacy Were — Jr. SOC Analyst / Threat Hunter / I.T Specialist / Incident Responder/ Jr. Network Engineer"); break;
       case "stack":    pushLine("out", STACK.map((s) => s.name).join(", ")); break;
       case "practice": pushLine("out", PLATFORMS.map((p) => p.name).join(", ")); break;
       case "tools":    pushLine("out", TOOLS.map((t) => t.name).join(", ")); break;
       case "projects": pushLine("out", PROJECTS.map((p) => p.name).join(", ")); break;
-      case "contact":  pushLine("out", "stacyywere@gmail.com - open to junior SOC roles & internships"); break;
+      case "contact":  pushLine("out", "stacyywere@gmail.com"); break;
       case "scan":     runScanDemo(); break;
       case "clear":    setTermLines([]); break;
       default:         pushLine("out", `command not found: '${raw}' — type 'help' to see available commands`);
@@ -981,7 +982,7 @@ export default function Portfolio() {
             <h3 style={{ margin: "0 0 8px", display: "flex", alignItems: "center", gap: 8 }}><ShieldCheck size={18} color={COLORS.c1} /> Download résumé</h3>
             <p style={{ fontSize: 13, color: "rgba(246,233,238,0.65)", margin: "0 0 18px" }}>Enter your email to download my résumé.</p>
             <form onSubmit={handleResumeSubmit}>
-              <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="stacyywere@gmail.com" style={{ width: "100%", padding: "12px 14px", borderRadius: 8, border: `1px solid ${COLORS.line}`, background: "rgba(255,255,255,0.04)", color: COLORS.paper, fontSize: 14, marginBottom: 14 }} />
+              <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Your email" style={{ width: "100%", padding: "12px 14px", borderRadius: 8, border: `1px solid ${COLORS.line}`, background: "rgba(255,255,255,0.04)", color: COLORS.paper, fontSize: 14, marginBottom: 14 }} />
               <div style={{ textAlign: "left", marginBottom: 14, color: "rgba(246,233,238,0.72)", fontSize: 12.5, lineHeight: 1.5 }}>
                 <label style={{ display: "flex", alignItems: "flex-start", gap: 8, marginBottom: 10, cursor: "pointer" }}>
                   <input type="checkbox" required checked={emailConsent} onChange={(e) => setEmailConsent(e.target.checked)} style={{ marginTop: 3, accentColor: COLORS.c3 }} />
