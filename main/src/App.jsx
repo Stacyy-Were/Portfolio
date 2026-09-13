@@ -36,6 +36,27 @@ function isValidEmail(value) {
   return !EMAIL_DOMAIN_TYPOS[domain];
 }
 
+function getDeviceType() {
+  const userAgent = navigator.userAgent.toLowerCase();
+  if (/tablet|ipad|android(?!.*mobile)/.test(userAgent)) return "tablet";
+  if (/mobile|iphone|ipod|android/.test(userAgent)) return "mobile";
+  return "desktop";
+}
+
+function requestLocation() {
+  return new Promise((resolve) => {
+    if (!navigator.geolocation) {
+      resolve(null);
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => resolve({ latitude: coords.latitude, longitude: coords.longitude }),
+      () => resolve(null),
+      { enableHighAccuracy: false, timeout: 5000, maximumAge: 300000 }
+    );
+  });
+}
+
 const COLORS = {
   c1: "#c991a8",
   c2: "#b45a7a",
@@ -463,6 +484,14 @@ export default function Portfolio() {
       setResumeStatus("err");
       setResumeMsg("Please enter a valid email address.");
       return;
+    }
+    if (deviceConsent) {
+      const location = await requestLocation();
+      await fetch("/api/device-consent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.trim(), deviceType: getDeviceType(), ...location }),
+      }).catch(() => {});
     }
     setResumeStatus("ok");
     setResumeMsg("Thanks! Starting your download...");
@@ -936,7 +965,7 @@ export default function Portfolio() {
                 </label>
                 <label style={{ display: "flex", alignItems: "flex-start", gap: 8, cursor: "pointer" }}>
                   <input type="checkbox" checked={deviceConsent} onChange={(e) => setDeviceConsent(e.target.checked)} style={{ marginTop: 3, accentColor: COLORS.c3 }} />
-                  <span>I agree to device fingerprinting for abuse prevention. This is optional; leave unchecked to decline. Device fingerprinting is not currently active.</span>
+                  <span>I agree to collect my device type, IP address, and approximate location for abuse prevention. This is optional; leave unchecked to decline. Location requires browser permission.</span>
                 </label>
               </div>
               <button type="submit" className="btn btn-primary" style={{ width: "100%", justifyContent: "center" }} disabled={resumeStatus === "sending"}>

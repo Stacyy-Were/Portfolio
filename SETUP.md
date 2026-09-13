@@ -6,7 +6,9 @@ The component is fully interactive out of the box: typed roles, a working termin
 Place the résumé at `main/public/resume.pdf`. The app checks the email format,
 requires consent to share the address for the résumé request, and starts the
 download. This simple option does not verify that the address belongs to the
-person entering it. Device fingerprinting is not currently active.
+person entering it. If a visitor opts in, the site records device type, IP
+address, and approximate location for abuse prevention. Location is collected
+only after the browser permission prompt is accepted.
 
 ## 2. Configure Supabase for contact messages
 If you want the contact form to save messages, go to [supabase.com](https://supabase.com) and create a project. In the SQL editor, run:
@@ -26,6 +28,18 @@ on contact_messages
 for insert
 to anon
 with check (true);
+
+create table device_consents (
+  id uuid primary key default gen_random_uuid(),
+  email text not null,
+  device_type text not null,
+  ip_address text not null,
+  location_lat double precision,
+  location_lng double precision,
+  created_at timestamptz default now()
+);
+
+alter table device_consents enable row level security;
 ```
 Go to **Project Settings → API** and copy your **Project URL** and **publishable key**. For local development, add them to `main/.env.local`:
 ```js
@@ -45,6 +59,11 @@ npm run dev
 To deploy on Vercel, import the repository and set **Root Directory** to `main`. Add these Environment Variables only if you use the contact form:
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_PUBLISHABLE_KEY`
+
+For the Vercel API function, also add these server-only variables. Do not prefix
+them with `VITE_` and do not expose the service-role key to browser code:
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_ROLE_KEY`
 
 Use the Supabase Project URL and the public `anon` key from **Project Settings → API**. Do not use the service-role key in Vercel or frontend code.
 
