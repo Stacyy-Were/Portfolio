@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import {
   Mail, Download, Menu, X, TerminalSquare, Radar, ChevronRight, ShieldCheck,
   GitFork, Link, Video, MessageCircle, ArrowUp, ExternalLink, Send, Shuffle,
-  Server, Skull, Monitor, Bug, Code2, Database, Braces, Cpu, Terminal,
+  Server, Skull, Bug, Code2, Database, Braces, Cpu, Terminal,
   BookOpen, Plane, Tv, Gauge, Music, Flag, ChevronDown,
 } from "lucide-react";
 import heroImage from "./assets/1141405.jpg";
@@ -110,6 +110,14 @@ function LanguageIcon({ slug, label }) {
   return <SiIcon slug={slug} size={18} alt={label} />;
 }
 
+function WindowsLogo({ size = 28, color = COLORS.c1 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" aria-label="Windows logo" role="img">
+      <path fill={color} d="M2 4.5 10.5 3.2v8.3H2V4.5Zm9.5-1.45L22 1.5v10h-10.5V3.05ZM2 12.5h8.5v8.3L2 19.5v-7Zm9.5 0H22v10L11.5 20.95V12.5Z" />
+    </svg>
+  );
+}
+
 /* tech stack: lab + languages */
 const STACK = [
   {
@@ -132,7 +140,7 @@ const STACK = [
   },
   {
     id: "win10", cat: "target", role: "Target", name: "Windows 10",
-    siSlug: "windows", LucideIcon: WindowsLogo,
+    siSlug: null, LucideIcon: WindowsLogo,
     short: "Target machine for studying Windows logs, services and attack surfaces.",
     detail: "Used to get comfortable with Event Viewer logs, Windows services and how attacks look from the defender's side.",
   },
