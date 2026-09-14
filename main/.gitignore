@@ -22,5 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-main/public/resume.pdf
+**/resume.pdf
 
