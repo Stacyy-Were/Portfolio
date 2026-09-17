@@ -1,5 +1,5 @@
 # Cybersecurity Portfolio
-![ML](public/diagram.png)
+![ML](/public/diagram.png)
 A personal cybersecurity portfolio showcasing my projects, technical skills, home lab environment and ongoing development in cybersecurity.
 
 The portfolio reflects my transition from an IT background into cybersecurity with a focus on **SOC analysis, blue team operations, networking and ethical hacking**.
